@@ -77,6 +77,11 @@ cat > "$APPDIR/AppRun" << 'APPRUN'
 #!/bin/bash
 APPDIR="$(cd "$(dirname "$0")" && pwd)"
 
+# Isolate Python environment from other AppImages
+unset PYTHONHOME
+unset PYTHONPATH
+unset PYTHONDONTWRITEBYTECODE
+
 # Qt platform plugin path
 export QT_PLUGIN_PATH="${APPDIR}/usr/lib/python3.12/site-packages/PyQt6/Qt6/plugins"
 
