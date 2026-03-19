@@ -1,0 +1,12 @@
+Package: zerotier-gui
+Version: @VERSION@
+Section: net
+Priority: optional
+Architecture: all
+Depends: python3 (>= 3.10), python3-pyqt6 (>= 6.4), python3-pyqt6.qtsvg, policykit-1
+Maintainer: Alessandro <alessandro@zerotier-gui>
+Description: ZeroTier Network Manager - GUI
+ A graphical interface for managing ZeroTier networks.
+ Provides a system tray icon, network join/leave, peer list,
+ and service start/stop via Polkit authentication.
+Homepage: https://github.com/alessandro/zerotier-gui

@@ -1,0 +1,33 @@
+#!/bin/bash
+# ZeroTier GUI - Polkit helper script
+# This script is executed via pkexec to perform privileged operations.
+# It is installed to /usr/lib/zerotier-gui/zerotier-gui-helper
+
+set -euo pipefail
+
+TOKEN_PATHS=(
+    "/var/lib/zerotier-one/authtoken.secret"
+)
+
+case "${1:-}" in
+    read-token)
+        for path in "${TOKEN_PATHS[@]}"; do
+            if [ -f "$path" ]; then
+                cat "$path"
+                exit 0
+            fi
+        done
+        echo "Error: auth token not found" >&2
+        exit 1
+        ;;
+    start-service)
+        systemctl start zerotier-one
+        ;;
+    stop-service)
+        systemctl stop zerotier-one
+        ;;
+    *)
+        echo "Usage: $0 {read-token|start-service|stop-service}" >&2
+        exit 1
+        ;;
+esac

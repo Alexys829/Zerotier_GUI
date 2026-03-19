@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=ZeroTier GUI
+Comment=Manage ZeroTier networks
+Exec=zerotier-gui
+Icon=zerotier-gui
+Terminal=false
+Categories=Network;System;
+Keywords=zerotier;vpn;network;
