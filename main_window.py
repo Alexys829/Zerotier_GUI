@@ -166,11 +166,11 @@ class MainWindow(QMainWindow):
 
         # Leave + Details buttons
         btn_layout = QHBoxLayout()
-        self._btn_leave = QPushButton("Leave Selected Network")
+        self._btn_leave = QPushButton("Leave Network")
         self._btn_leave.setObjectName("btnDanger")
         self._btn_leave.clicked.connect(self._on_leave)
         btn_layout.addWidget(self._btn_leave)
-        self._btn_details = QPushButton("Network Details...")
+        self._btn_details = QPushButton("Details")
         self._btn_details.setEnabled(False)
         self._btn_details.clicked.connect(self._on_show_details)
         btn_layout.addWidget(self._btn_details)
@@ -223,9 +223,11 @@ class MainWindow(QMainWindow):
         self._saved_table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
         saved_header = self._saved_table.horizontalHeader()
         saved_header.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
-        saved_header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
-        saved_header.setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)
-        saved_header.setSectionResizeMode(3, QHeaderView.ResizeMode.ResizeToContents)
+        saved_header.setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
+        saved_header.setSectionResizeMode(2, QHeaderView.ResizeMode.Fixed)
+        saved_header.setSectionResizeMode(3, QHeaderView.ResizeMode.Fixed)
+        self._saved_table.setColumnWidth(2, 80)
+        self._saved_table.setColumnWidth(3, 110)
         self._saved_table.verticalHeader().setVisible(False)
         self._saved_table.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self._saved_table.customContextMenuRequested.connect(
@@ -578,10 +580,12 @@ class MainWindow(QMainWindow):
             self._saved_table.setItem(row, 1, QTableWidgetItem(nid))
 
             btn_join = QPushButton("Join")
+            btn_join.setObjectName("btnJoin")
             btn_join.clicked.connect(lambda checked, n=nid: self._on_join_saved(n))
             self._saved_table.setCellWidget(row, 2, btn_join)
 
             btn_remove = QPushButton("Remove")
+            btn_remove.setObjectName("btnDanger")
             btn_remove.clicked.connect(lambda checked, n=nid: self._on_remove_saved(n))
             self._saved_table.setCellWidget(row, 3, btn_remove)
 
