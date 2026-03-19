@@ -42,10 +42,6 @@ REFRESH_INTERVAL_MS = 2_000
 NETWORK_ID_RE = re.compile(r"^[0-9a-fA-F]{16}$")
 AUTOSTART_DIR = Path.home() / ".config" / "autostart"
 AUTOSTART_PATH = AUTOSTART_DIR / "zerotier-gui.desktop"
-DESKTOP_FILE_PATH = Path.home() / ".local" / "share" / "applications" / "zerotier-gui.desktop"
-ICON_FILE_PATH = (
-    Path.home() / ".local" / "share" / "icons" / "hicolor" / "scalable" / "apps" / "zerotier-gui.svg"
-)
 
 
 class RefreshWorker(QThread):
@@ -303,11 +299,6 @@ class MainWindow(QMainWindow):
         self._chk_autostart_app.toggled.connect(self._on_autostart_app_toggled)
         app_layout.addWidget(self._chk_autostart_app)
 
-        self._btn_remove_menu = QPushButton("Remove from application menu")
-        self._btn_remove_menu.clicked.connect(self._on_remove_from_menu)
-        self._btn_remove_menu.setVisible(DESKTOP_FILE_PATH.exists())
-        app_layout.addWidget(self._btn_remove_menu)
-
         tab_layout.addWidget(app_group)
 
         # Service group
@@ -344,15 +335,6 @@ class MainWindow(QMainWindow):
             except FileNotFoundError:
                 pass
             self.statusBar().showMessage("Autostart disabled", 3000)
-
-    def _on_remove_from_menu(self) -> None:
-        for path in (DESKTOP_FILE_PATH, ICON_FILE_PATH):
-            try:
-                path.unlink()
-            except FileNotFoundError:
-                pass
-        self._btn_remove_menu.setEnabled(False)
-        self.statusBar().showMessage("Removed from application menu", 3000)
 
     def _on_autostart_svc_toggled(self, checked: bool) -> None:
         try:
