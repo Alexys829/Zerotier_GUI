@@ -1,4 +1,3 @@
-import os
 import sys
 from pathlib import Path
 
@@ -7,47 +6,11 @@ from PyQt6.QtWidgets import QApplication
 
 from database import Database
 from main_window import MainWindow
-from resources import SVG_ICON, SVG_ONLINE, svg_to_qicon
+from resources import SVG_ONLINE, svg_to_qicon
 from tray_icon import TrayIcon
 from zerotier_client import ZeroTierClient
 
 _SOCKET_NAME = "zerotier-gui-instance"
-
-_DESKTOP_ENTRY = """\
-[Desktop Entry]
-Type=Application
-Name=ZeroTier GUI
-Comment=Manage ZeroTier networks
-Exec={exec_path}
-Icon={icon_path}
-Terminal=false
-Categories=Network;System;
-Keywords=zerotier;vpn;network;
-"""
-
-
-def _install_desktop_integration() -> None:
-    """Install .desktop file and icon when running as AppImage."""
-    appimage = os.environ.get("APPIMAGE")
-    if not appimage:
-        return
-
-    desktop_dir = Path.home() / ".local" / "share" / "applications"
-    desktop_path = desktop_dir / "zerotier-gui.desktop"
-    icon_dir = Path.home() / ".local" / "share" / "icons" / "hicolor" / "scalable" / "apps"
-    icon_path = icon_dir / "zerotier-gui.svg"
-
-    expected_desktop = _DESKTOP_ENTRY.format(exec_path=appimage, icon_path=icon_path)
-
-    # Install/update .desktop if missing or AppImage path changed
-    if not desktop_path.exists() or desktop_path.read_text(encoding="utf-8") != expected_desktop:
-        desktop_dir.mkdir(parents=True, exist_ok=True)
-        desktop_path.write_text(expected_desktop, encoding="utf-8")
-
-    # Install icon if missing
-    if not icon_path.exists():
-        icon_dir.mkdir(parents=True, exist_ok=True)
-        icon_path.write_text(SVG_ICON, encoding="utf-8")
 
 
 def main():
@@ -78,8 +41,6 @@ def main():
     QLocalServer.removeServer(_SOCKET_NAME)
     server = QLocalServer()
     server.listen(_SOCKET_NAME)
-
-    _install_desktop_integration()
 
     client = ZeroTierClient()
     window = MainWindow(client)
